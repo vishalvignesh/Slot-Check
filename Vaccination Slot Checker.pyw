@@ -6,6 +6,21 @@ import os
 import time
 from pynotifier import Notification
 import re
+from notify_run import Notify
+import pickle
+
+notif = None
+
+if os.path.exists('notify_file'):
+    with open('notify_file','rb') as n:
+        notif = pickle.load(n)
+    print(notif.endpoint)
+else:
+    notif = Notify()
+    notif.register()
+    with open('notify_file','wb') as n:
+        pickle.dump(notif,n)
+    print(notif.endpoint)
 
 sleep_timer = 1
 interval_timer = 5
@@ -52,6 +67,7 @@ def chennai():
 	        duration=5,
 	        urgency='normal'
             ).send()
+        notif.send('Vaccine Slot Possibly Available according to CoWin Website')
     else:
         print('Vaccine Slot Not Available')
 
