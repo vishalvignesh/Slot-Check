@@ -10,14 +10,16 @@ import re
 sleep_timer = 1
 interval_timer = 5
 chrome_options = Options()
+driver = webdriver.Chrome('./chromedriver',options=chrome_options)
+driver.set_window_size(500,500)
+driver.get("https://www.cowin.gov.in/home")
 #chrome_options.add_argument("--headless") 
 #chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
 #chrome_options.add_experimental_option('useAutomationExtension', False)
 
 
-def chennai(driver):
-    
-    driver.get("https://www.cowin.gov.in/home")
+def chennai():
+    driver.refresh()
     get_by_dist = driver.find_element_by_class_name('custom-checkbox').click()
     time.sleep(sleep_timer)
     state_select = driver.find_element_by_id("mat-select-0").click()
@@ -56,15 +58,10 @@ def chennai(driver):
 
 
 while(1):
-    driver = webdriver.Chrome('./chromedriver',options=chrome_options)
-    driver.set_window_size(400,400)
-
     try:
-        chennai(driver)
-        driver.close()
+        chennai()
     except:
         print('Error')
-        driver.close()
     time.sleep(interval_timer)
 
 
