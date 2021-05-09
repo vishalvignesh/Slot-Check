@@ -9,6 +9,7 @@ import re
 from notify_run import Notify
 import pickle
 
+phone_notif_count = 0
 notif = None
 
 if os.path.exists('notify_file'):
@@ -34,6 +35,7 @@ driver.get("https://www.cowin.gov.in/home")
 
 
 def chennai():
+    global phone_notif_count
     driver.refresh()
     get_by_dist = driver.find_element_by_class_name('custom-checkbox').click()
     time.sleep(sleep_timer)
@@ -67,9 +69,17 @@ def chennai():
 	        duration=5,
 	        urgency='normal'
             ).send()
-        notif.send('Vaccine Slot Possibly Available according to CoWin Website')
+        if phone_notif_count == 0:
+            notif.send('Vaccine Slot Possibly Available according to CoWin Website')
+            phone_notif_count += 1
+        else:
+            phone_notif_count += 1
+            print('New Notif Count: ',phone_notif_count)
+            if phone_notif_count == 15:
+                phone_notif_count = 0
     else:
         print('Vaccine Slot Not Available')
+        phone_notif_count = 0
 
 
 
@@ -78,6 +88,8 @@ while(1):
         chennai()
     except:
         print('Error')
+        driver.get("https://www.cowin.gov.in/home")
+        driver.refresh()
     time.sleep(interval_timer)
 
 
