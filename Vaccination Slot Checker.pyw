@@ -25,7 +25,8 @@ else:
 
 sleep_timer = 1
 interval_timer = 5
-chrome_options = Options()
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument("user-data-dir="+os.getcwd()+'/chromeprofile') #Path to chrome profile
 driver = webdriver.Chrome('./chromedriver',options=chrome_options)
 driver.set_window_size(500,500)
 driver.get("https://www.cowin.gov.in/home")
@@ -33,6 +34,10 @@ driver.get("https://www.cowin.gov.in/home")
 #chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
 #chrome_options.add_experimental_option('useAutomationExtension', False)
 
+def login():
+    driver.refresh()
+    driver.get('https://selfregistration.cowin.gov.in')
+    
 
 def chennai():
     global phone_notif_count
@@ -53,7 +58,9 @@ def chennai():
     time.sleep(sleep_timer)
     get_age = driver.find_element_by_xpath("/html/body/app-root/div/app-home/div[2]/div/appointment-table/div/div/div/div/div/div/div/div/div/div/div[2]/form/div/div/div[3]/div/div[1]/label").click() #18+
     #get_age = driver.find_element_by_xpath("/html/body/app-root/div/app-home/div[2]/div/appointment-table/div/div/div/div/div/div/div/div/div/div/div[2]/form/div/div/div[3]/div/div[2]/label").click() #45+ Test Purpose
+    covaxin_only = driver.find_element_by_xpath("/html/body/app-root/div/app-home/div[2]/div/appointment-table/div/div/div/div/div/div/div/div/div/div/div[2]/form/div/div/div[3]/div/div[4]/label").click()
     time.sleep(sleep_timer)
+
 
     result = driver.find_element_by_xpath("/html/body/app-root/div/app-home/div[2]/div/appointment-table/div/div/div/div/div/div/div/div/div/div/div[2]/form/div/div/div[6]").get_attribute('innerHTML').replace('><','> <')
     #result = driver.page_source()
@@ -82,10 +89,12 @@ def chennai():
         phone_notif_count = 0
 
 
-
+#login()
 while(1):
     try:
         chennai()
+        #login()
+        None
     except:
         print('Error')
         driver.get("https://www.cowin.gov.in/home")

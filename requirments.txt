@@ -1,2 +1,3 @@
 py-notifier
 selenium
+notify_run
